@@ -1,7 +1,10 @@
+const WIDTH = 800
+const HEIGHT = 600
+
 var config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: WIDTH,
+    height: HEIGHT,
     physics: {
         default: 'arcade',
         arcade: {
@@ -25,6 +28,7 @@ function preload() {
 }
 
 function create() {
+    let word = "";
 
     let container = this.add.container(100, 100);
 
@@ -34,6 +38,9 @@ function create() {
     text.setOrigin(0.5, 0.5);
     container.add(box)
     container.add(text)
+
+    // This will be the player's answer
+    let wordText = this.add.bitmapText(400, 550, 'arcade', word).setTint(0xff0000);
 
     this.tweens.add({
         targets: container,
@@ -45,10 +52,20 @@ function create() {
         repeat: -1
     });
 
-    //  Receives every single key down event, regardless of origin or key
+    // Receives every single key up event, regardless of origin or key
+    this.input.keyboard.on('keyup', function (event) {
+        let key = String.fromCharCode(event.keyCode)
+        console.log("KEY:", key)
 
-    this.input.keyboard.on('keydown', function (event) {
-        console.log("KEY:", String.fromCharCode(event.keyCode));
+        // Print out letters
+        word = word.concat(key)
+        wordText.text = word
+        // Always re-align word to be central
+        wordText.x = (WIDTH / 2) - (wordText.width / 2)
+        console.dir(wordText)
+
+        /* TODO: Add an underline for style */
+        
     });
 
 }
