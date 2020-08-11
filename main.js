@@ -20,7 +20,8 @@ var game = new Phaser.Game(config);
 function preload() {
     this.load.setBaseURL('/');
 
-    this.load.image('box', 'img/box.png');
+    this.load.image('box', 'assets/img/box.png');
+    this.load.bitmapFont('arcade', 'assets/fonts/bitmap/arcade.png', 'assets/fonts/bitmap/arcade.xml');
 }
 
 function create() {
@@ -42,6 +43,12 @@ function create() {
         delay: 500,
         yoyo: true,
         repeat: -1
+    });
+
+    //  Receives every single key down event, regardless of origin or key
+
+    this.input.keyboard.on('keydown', function (event) {
+        console.log("KEY:", String.fromCharCode(event.keyCode));
     });
 
 }
