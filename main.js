@@ -1,5 +1,10 @@
+// Global Constants
 const WIDTH = 800
 const HEIGHT = 600
+const KEYS = Phaser.Input.Keyboard.KeyCodes
+
+// Game variables
+let onScreenPhrases = []    // In-game phrases currently on-screen
 
 var config = {
     type: Phaser.AUTO,
@@ -28,34 +33,24 @@ function preload() {
 }
 
 function create() {
-    let word = "";
-
-    let container = this.add.container(100, 100);
-
-    let box = this.physics.add.sprite(0, 0, 'box')
-    let text = this.add.text(0, 0, 'Testing');
-    text.font = "Arial";
-    text.setOrigin(0.5, 0.5);
-    container.add(box)
-    container.add(text)
-
     // This will be the player's answer
+    let word = "";
     let wordText = this.add.bitmapText(400, 550, 'arcade', word).setTint(0xff0000);
 
-    this.tweens.add({
-        targets: container,
-        x: text.x + 700,
-        ease: 'Power1',
-        duration: 3000,
-        delay: 500,
-        yoyo: true,
-        repeat: -1
-    });
-
     // Receives every single key up event, regardless of origin or key
-    this.input.keyboard.on('keyup', function (event) {
+    this.input.keyboard.on('keyup', (event) => {
         let key = String.fromCharCode(event.keyCode)
         console.log("KEY:", key)
+
+        // If user presses ENTER, they submit an answer
+        if (event.keyCode === KEYS.ENTER) {
+            testAnswer(this, word)
+        }
+
+        if (event.keyCode === KEYS.SPACE) {
+            // Test adding word to screen - simulate actual process
+            addWordToScreen(this, "Testing")
+        }
 
         // Print out letters
         word = word.concat(key)
@@ -65,11 +60,39 @@ function create() {
         console.dir(wordText)
 
         /* TODO: Add an underline for style */
-        
+
     });
 
 }
 
 function update() {
 
+}
+
+function testAnswer(self, answer) {
+    // Compare the answer with the current set of words/phrases
+    // If it matches remove the word/phrase from the set, add to the score, remove word from typing area
+    // If no match, do nothing - perhaps make a sound, show an error image
+
+}
+
+function addWordToScreen(self, w) {
+    let container = self.add.container(100, 100);
+
+    let box = self.physics.add.sprite(0, 0, 'box')
+    let text = self.add.text(0, 0, w);
+    text.font = "Arial";
+    text.setOrigin(0.5, 0.5);
+    container.add(box)
+    container.add(text)
+
+    self.tweens.add({
+        targets: container,
+        x: text.x + 700,
+        ease: 'Power1',
+        duration: 3000,
+        delay: 500,
+        yoyo: true,
+        repeat: -1
+    });
 }
