@@ -36,7 +36,7 @@ function preload() {
 }
 
 function create() {
-    currentWordText = this.add.bitmapText(400, 550, 'arcade', currentWord).setTint(0xff0000);
+    currentWordText = this.add.bitmapText(400, 550, 'arcade', currentWord, 12).setTint(0xff0000)
 
     // Receives every single key up event, regardless of origin or key
     this.input.keyboard.on('keyup', (event) => {
@@ -47,9 +47,16 @@ function create() {
         if (event.keyCode === KEYS.ENTER) {
             testAnswer(this, currentWord)
         }
-        
+        else if (event.keyCode === KEYS.BACKSPACE) {
+            // Make it look like we are backspacing the typed word
+            if (currentWordText.text.length > 0) {
+                currentWordText.text = currentWordText.text.slice(0, -1)
+                currentWordText.x = (WIDTH / 2) - (currentWordText.width / 2)
+                currentWord = currentWordText.text
+            }
+        }
 
-        else if (event.keyCode === KEYS.SPACE) {
+        else if (event.keyCode === KEYS.RIGHT) {
             // Test adding word to screen - simulate actual process
             addWordToScreen(this, "TESTING")
             // Reset typing area
@@ -84,6 +91,7 @@ function testAnswer(self, answer) {
 
     // Reset word
     currentWordText.text = ""
+    currentWord = ""
 
 }
 
