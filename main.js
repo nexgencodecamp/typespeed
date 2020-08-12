@@ -5,6 +5,7 @@ const KEYS = Phaser.Input.Keyboard.KeyCodes
 
 // Game variables
 let onScreenPhrases = []    // In-game phrases currently on-screen
+&let containers = []
 
 var config = {
     type: Phaser.AUTO,
@@ -49,7 +50,7 @@ function create() {
 
         if (event.keyCode === KEYS.SPACE) {
             // Test adding word to screen - simulate actual process
-            addWordToScreen(this, "Testing")
+            addWordToScreen(this, "TESTING")
         }
 
         // Print out letters
@@ -74,15 +75,18 @@ function testAnswer(self, answer) {
     // If it matches remove the word/phrase from the set, add to the score, remove word from typing area
     // If no match, do nothing - perhaps make a sound, show an error image
 
+    // Test delete word from screen
+    console.log("Word to delete:", answer)
+    deleteWordFromScreen(this, answer.trim())
 }
 
 function addWordToScreen(self, w) {
-    let container = self.add.container(100, 100);
-
+    let container = self.add.container(100, 100)
+    container.name = w
     let box = self.physics.add.sprite(0, 0, 'box')
     let text = self.add.text(0, 0, w);
-    text.font = "Arial";
-    text.setOrigin(0.5, 0.5);
+    text.font = "Arial"
+    text.setOrigin(0.5, 0.5)
     container.add(box)
     container.add(text)
 
@@ -95,4 +99,17 @@ function addWordToScreen(self, w) {
         yoyo: true,
         repeat: -1
     });
+
+    containers.push(container)
+}
+
+function deleteWordFromScreen(self, w) {
+    // We have to delete the container to remove it from screen
+    // We should also flag or delete it from the onScreenPhrases set
+    containers = containers.filter((val, idx) => {
+        if (val.name === w) {
+            val.destroy()
+        }
+        return val.name !== w
+    })
 }
