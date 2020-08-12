@@ -5,7 +5,9 @@ const KEYS = Phaser.Input.Keyboard.KeyCodes
 
 // Game variables
 let onScreenPhrases = []    // In-game phrases currently on-screen
-&let containers = []
+let containers = []
+let currentWord = "";  // This will be the player's answer
+let currentWordText    // Screen representation of the current word
 
 var config = {
     type: Phaser.AUTO,
@@ -34,9 +36,7 @@ function preload() {
 }
 
 function create() {
-    // This will be the player's answer
-    let word = "";
-    let wordText = this.add.bitmapText(400, 550, 'arcade', word).setTint(0xff0000);
+    currentWordText = this.add.bitmapText(400, 550, 'arcade', currentWord).setTint(0xff0000);
 
     // Receives every single key up event, regardless of origin or key
     this.input.keyboard.on('keyup', (event) => {
@@ -45,25 +45,28 @@ function create() {
 
         // If user presses ENTER, they submit an answer
         if (event.keyCode === KEYS.ENTER) {
-            testAnswer(this, word)
+            testAnswer(this, currentWord)
         }
+        
 
-        if (event.keyCode === KEYS.SPACE) {
+        else if (event.keyCode === KEYS.SPACE) {
             // Test adding word to screen - simulate actual process
             addWordToScreen(this, "TESTING")
+            // Reset typing area
+            currentWordText.text = ""
         }
+        else {
+            // Print out letters
+            currentWord = currentWord.concat(key)
+            currentWordText.text = currentWord
+            // Always re-align word to be central
+            currentWordText.x = (WIDTH / 2) - (currentWordText.width / 2)
+            console.dir(currentWordText)
 
-        // Print out letters
-        word = word.concat(key)
-        wordText.text = word
-        // Always re-align word to be central
-        wordText.x = (WIDTH / 2) - (wordText.width / 2)
-        console.dir(wordText)
+            /* TODO: Add an underline for style */
 
-        /* TODO: Add an underline for style */
-
+        }
     });
-
 }
 
 function update() {
@@ -78,6 +81,10 @@ function testAnswer(self, answer) {
     // Test delete word from screen
     console.log("Word to delete:", answer)
     deleteWordFromScreen(this, answer.trim())
+
+    // Reset word
+    currentWordText.text = ""
+
 }
 
 function addWordToScreen(self, w) {
