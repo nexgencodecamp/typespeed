@@ -105,15 +105,9 @@ function addWordToScreen(self, w) {
     container.add(box)
     container.add(text)
 
-    self.tweens.add({
-        targets: container,
-        x: text.x + 700,
-        ease: 'Power1',
-        duration: 3000,
-        delay: 500,
-        yoyo: true,
-        repeat: -1
-    });
+    // Give a Container velocity by setting it's physics 'body' property
+    self.physics.world.enable(container);
+    container.body.setVelocity(100, 0).setBounce(1, 0).setCollideWorldBounds(true);
 
     containers.push(container)
 }
