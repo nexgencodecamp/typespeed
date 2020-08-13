@@ -9,6 +9,7 @@ let _containers = []
 let currentWord = "";  // This will be the player's answer
 let currentWordText    // Screen representation of the current word
 let _level = 1
+let _nextWord = 0;
 
 var config = {
     type: Phaser.AUTO,
@@ -37,7 +38,6 @@ function setupAndStartLevel(self, levelNum) {
     _onScreenPhrases.forEach((word, idx) => {
         let container = self.add.container(-100, 100 + (idx * 50))
         container.name = word
-        //let box = self.physics.add.sprite(0, 0, 'box')        
         let text = self.add.text(0, 0, word);
         text.font = "Arial"
         text.setOrigin(0.5, 0.5)
@@ -48,13 +48,18 @@ function setupAndStartLevel(self, levelNum) {
         container.add(text)
         // text.toggleFlipX(); - flips the text!
 
+        container.on('destroy', (obj) => {
+            // Set the next word going
+            _containers[_nextWord++].body.setVelocity(Phaser.Math.Between(50, 100), 0)
+        })
+
         // Give a Container velocity by setting it's physics 'body' property
         self.physics.world.enable(container);
-
-        // Move words across the screen at different speeds
-        container.body.setVelocity(Phaser.Math.Between(50, 100), 0)
         _containers.push(container)
     })
+
+    // Set first word going
+    _containers[_nextWord++].body.setVelocity(Phaser.Math.Between(50, 100), 0)
 }
 
 function preload() {
@@ -114,12 +119,11 @@ function update() {
 }
 
 function testAnswer(self, answer) {
-    // Compare the answer with the current set of words/phrases
-    // If it matches remove the word/phrase from the set, add to the score, remove word from typing area
-    // If no match, do nothing - perhaps make a sound, show an error image
-
-    // Test delete word from screen
-    console.log("Word to delete:", answer)
+    /* 
+        Compare the answer with the current set of words/phrases
+        If it matches remove the word/phrase from the set, add to the score, remove word from typing area
+        If no match, do nothing - perhaps make a sound, show an error image 
+    */
     deleteWordFromScreen(self, answer.trim())
     resetCurrentWord()
 }

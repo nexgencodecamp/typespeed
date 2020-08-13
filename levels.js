@@ -4,6 +4,7 @@ const LEVEL_1 = {
     "wordList": [
         "testing",
         "typespeed",
-        "nexgencodecamp"
+        "nexgencodecamp",
+        "hypertext"
     ]
 }
