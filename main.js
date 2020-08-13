@@ -30,12 +30,12 @@ var config = {
 var game = new Phaser.Game(config);
 
 
-function setupLevel(self, levelNum) {
+function setupAndStartLevel(self, levelNum) {
     _onScreenPhrases = LEVEL_1.wordList
 
     // Create bitmaps & container objects
     _onScreenPhrases.forEach((word, idx) => {
-        let container = self.add.container(100, 100 + (idx * 50))
+        let container = self.add.container(-100, 100 + (idx * 50))
         container.name = word
         //let box = self.physics.add.sprite(0, 0, 'box')        
         let text = self.add.text(0, 0, word);
@@ -46,27 +46,25 @@ function setupLevel(self, levelNum) {
         let box = self.physics.add.existing(r)
         container.add(box)
         container.add(text)
+        // text.toggleFlipX(); - flips the text!
 
         // Give a Container velocity by setting it's physics 'body' property
         self.physics.world.enable(container);
-        container.body.setVelocity(100, 200).setBounce(1, 1).setCollideWorldBounds(true);
+
+        // Move words across the screen at different speeds
+        container.body.setVelocity(Phaser.Math.Between(50, 100), 0)
         _containers.push(container)
     })
 }
 
 function preload() {
     this.load.setBaseURL('/');
-
     this.load.image('box', 'assets/img/box.png');
     this.load.bitmapFont('arcade', 'assets/fonts/bitmap/arcade.png', 'assets/fonts/bitmap/arcade.xml');
-
-
 }
 
 function create() {
     currentWordText = this.add.bitmapText(400, 550, 'arcade', currentWord, 12).setTint(0xff0000)
-    // Setup a few words loaded from a JSON source
-    setupLevel(this, _level)
 
     // Receives every single key up event, regardless of origin or key
     this.input.keyboard.on('keyup', (event) => {
@@ -74,6 +72,7 @@ function create() {
         console.log("KEY:", key)
 
         // If user presses ENTER, they submit an answer
+        // TODO: Setup a regular expression to match only a-z and certain keys
         if (event.keyCode === KEYS.ENTER) {
             testAnswer(this, currentWord)
         }
@@ -85,10 +84,9 @@ function create() {
                 currentWord = currentWordText.text
             }
         }
-
-        else if (event.keyCode === KEYS.RIGHT) { // This will be our 'Game Start'
-            // Test adding word to screen - simulate actual process
-            addWordToScreen(this, "TESTING")
+        else if (event.keyCode === KEYS.RIGHT) { // This will be our 'Game Start'            
+            // Setup a few words loaded from a JSON source
+            setupAndStartLevel(this, _level)
             // Reset typing area
             currentWordText.text = ""
         }
@@ -122,23 +120,6 @@ function testAnswer(self, answer) {
     // Reset word
     currentWordText.text = ""
     currentWord = ""
-}
-
-function addWordToScreen(self, w) {
-    // let container = self.add.container(100, 100)
-    // container.name = w
-    // let box = self.physics.add.sprite(0, 0, 'box')
-    // let text = self.add.text(0, 0, w);
-    // text.font = "Arial"
-    // text.setOrigin(0.5, 0.5)
-    // container.add(box)
-    // container.add(text)
-
-    // Give a Container velocity by setting it's physics 'body' property
-    // self.physics.world.enable(container);
-    //container.body.setVelocity(100, 0).setBounce(1, 0).setCollideWorldBounds(true);
-
-    // containers.push(container)
 }
 
 function deleteWordFromScreen(self, w) {
