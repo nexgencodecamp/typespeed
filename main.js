@@ -105,7 +105,12 @@ function create() {
 }
 
 function update() {
-
+    // Destroy offscreen game objects
+    _containers.forEach((val, idx) => {
+        if (val.active && val.x > WIDTH + val.first.width / 2) {
+            val.destroy()
+        }
+    })
 }
 
 function testAnswer(self, answer) {
@@ -115,11 +120,8 @@ function testAnswer(self, answer) {
 
     // Test delete word from screen
     console.log("Word to delete:", answer)
-    deleteWordFromScreen(this, answer.trim())
-
-    // Reset word
-    currentWordText.text = ""
-    currentWord = ""
+    deleteWordFromScreen(self, answer.trim())
+    resetCurrentWord()
 }
 
 function deleteWordFromScreen(self, w) {
@@ -131,4 +133,9 @@ function deleteWordFromScreen(self, w) {
         }
         return val.name !== w
     })
+}
+
+function resetCurrentWord() {
+    currentWordText.text = ""
+    currentWord = ""
 }
