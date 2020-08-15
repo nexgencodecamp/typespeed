@@ -124,19 +124,17 @@ function testAnswer(self, answer) {
         If no match, do nothing - perhaps make a sound, show an error image 
     */
     deleteWordFromScreen(self, answer.trim())
-    resetCurrentWord()
+    //resetCurrentWord()
 }
 
 function deleteWordFromScreen(self, w) {
-    // We have to delete the container to remove it from screen
-    // We should also flag or delete it from the onScreenPhrases set
-    _containers = _containers.filter((val, idx) => {
+    // We have to delete the container to remove it from screen    
+    _containers.forEach((val, idx) => {
         if (val.name.toUpperCase() === w.toUpperCase()) {
             val.destroy()
-        }
-        return true
+            resetCurrentWord()
+        }        
     })
-    console.dir(_containers)
 }
 
 function resetCurrentWord() {
