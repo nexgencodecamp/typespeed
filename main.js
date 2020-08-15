@@ -130,12 +130,13 @@ function testAnswer(self, answer) {
 function deleteWordFromScreen(self, w) {
     // We have to delete the container to remove it from screen
     // We should also flag or delete it from the onScreenPhrases set
-    containers = containers.filter((val, idx) => {
-        if (val.name === w) {
+    _containers = _containers.filter((val, idx) => {
+        if (val.name.toUpperCase() === w.toUpperCase()) {
             val.destroy()
         }
-        return val.name !== w
+        return true
     })
+    console.dir(_containers)
 }
 
 function resetCurrentWord() {
