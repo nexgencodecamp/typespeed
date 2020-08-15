@@ -75,6 +75,7 @@ function preload() {
 
 function create() {
     _currentWordText = this.add.bitmapText(400, 550, 'arcade', _currentWord, 12).setTint(0xff0000)
+    _scoreText = this.add.bitmapText(750, 20, 'arcade', "0", 12).setTint(0xff0000)
 
     // Receives every single key up event, regardless of origin or key
     this.input.keyboard.on('keyup', (event) => {
@@ -129,23 +130,27 @@ function testAnswer(self, answer) {
         If it matches remove the word/phrase from the set, add to the score, remove word from typing area
         If no match, do nothing - perhaps make a sound, show an error image 
     */
-    deleteWordFromScreen(self, answer.trim())
-}
-
-function deleteWordFromScreen(self, w) {
-    // We have to delete the container to remove it from screen    
     _containers.forEach((val, idx) => {
-        if (val.name.toUpperCase() === w.toUpperCase()) {
-            val.destroy()
-            resetCurrentWord()
+        if (val.name.toUpperCase() === answer.trim().toUpperCase()) {
+            deleteWordFromScreen(val)
 
-            // Check for end of level
-            if (_nextWord === _containers.length) {
-                _endOfLevel = true
-                console.log("End of Level:", _level)
-            }
+            // Reset type area & check for end of level
+            resetCurrentWord()
+            endOfLevel()
         }
     })
+}
+
+function deleteWordFromScreen(val) {
+    // We have to delete the container to remove it from screen    
+    val.destroy()
+}
+
+function endOfLevel() {
+    if (_nextWord === _containers.length) {
+        _endOfLevel = true
+        console.log("End of Level:", _level)
+    }
 }
 
 function resetCurrentWord() {
