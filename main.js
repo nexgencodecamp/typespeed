@@ -6,8 +6,8 @@ const KEYS = Phaser.Input.Keyboard.KeyCodes
 // Game variables
 let _onScreenPhrases    // In-game phrases currently on-screen
 let _containers = []
-let currentWord = "";  // This will be the player's answer
-let currentWordText    // Screen representation of the current word
+let _currentWord = "";  // This will be the player's answer
+let _currentWordText    // Screen representation of the current word
 let _level = 1
 let _nextWord = 0;
 
@@ -29,7 +29,6 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
-
 
 function setupAndStartLevel(self, levelNum) {
     _onScreenPhrases = LEVEL_1.wordList
@@ -69,7 +68,7 @@ function preload() {
 }
 
 function create() {
-    currentWordText = this.add.bitmapText(400, 550, 'arcade', currentWord, 12).setTint(0xff0000)
+    _currentWordText = this.add.bitmapText(400, 550, 'arcade', _currentWord, 12).setTint(0xff0000)
 
     // Receives every single key up event, regardless of origin or key
     this.input.keyboard.on('keyup', (event) => {
@@ -79,29 +78,29 @@ function create() {
         // If user presses ENTER, they submit an answer
         // TODO: Setup a regular expression to match only a-z and certain keys
         if (event.keyCode === KEYS.ENTER) {
-            testAnswer(this, currentWord)
+            testAnswer(this, _currentWord)
         }
         else if (event.keyCode === KEYS.BACKSPACE) {
             // Make it look like we are backspacing the typed word
-            if (currentWordText.text.length > 0) {
-                currentWordText.text = currentWordText.text.slice(0, -1)
-                currentWordText.x = (WIDTH / 2) - (currentWordText.width / 2)
-                currentWord = currentWordText.text
+            if (_currentWordText.text.length > 0) {
+                _currentWordText.text = _currentWordText.text.slice(0, -1)
+                _currentWordText.x = (WIDTH / 2) - (_currentWordText.width / 2)
+                _currentWord = _currentWordText.text
             }
         }
         else if (event.keyCode === KEYS.RIGHT) { // This will be our 'Game Start'            
             // Setup a few words loaded from a JSON source
             setupAndStartLevel(this, _level)
             // Reset typing area
-            currentWordText.text = ""
+            _currentWordText.text = ""
         }
         else {
             // Print out letters
-            currentWord = currentWord.concat(key)
-            currentWordText.text = currentWord
+            _currentWord = _currentWord.concat(key)
+            _currentWordText.text = _currentWord
             // Always re-align word to be central
-            currentWordText.x = (WIDTH / 2) - (currentWordText.width / 2)
-            console.dir(currentWordText)
+            _currentWordText.x = (WIDTH / 2) - (_currentWordText.width / 2)
+            console.dir(_currentWordText)
 
             /* TODO: Add an underline for style */
 
@@ -140,6 +139,6 @@ function deleteWordFromScreen(self, w) {
 }
 
 function resetCurrentWord() {
-    currentWordText.text = ""
-    currentWord = ""
+    _currentWordText.text = ""
+    _currentWord = ""
 }
