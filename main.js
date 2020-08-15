@@ -2,14 +2,19 @@
 const WIDTH = 800
 const HEIGHT = 600
 const KEYS = Phaser.Input.Keyboard.KeyCodes
+const SCORE_WORD = 100
+const SCORE_MISS_WORD = -100
+const SCORE_BONUS_LEVEL_1 = 1000
 
 // Game variables
 let _onScreenPhrases    // In-game phrases currently on-screen
 let _containers = []
-let _currentWord = "";  // This will be the player's answer
+let _currentWord = ""   // This will be the player's answer
 let _currentWordText    // Screen representation of the current word
 let _level = 1
-let _nextWord = 0;
+let _nextWord = 0
+let _score = 0
+let _endOfLevel = false
 
 var config = {
     type: Phaser.AUTO,
@@ -28,7 +33,7 @@ var config = {
     }
 };
 
-var game = new Phaser.Game(config);
+var game = new Phaser.Game(config)
 
 function setupAndStartLevel(self, levelNum) {
     _onScreenPhrases = LEVEL_1.wordList
@@ -48,12 +53,13 @@ function setupAndStartLevel(self, levelNum) {
         // text.toggleFlipX(); - flips the text!
 
         container.on('destroy', (obj) => {
-            // Set the next word going
-            _containers[_nextWord++].body.setVelocity(Phaser.Math.Between(50, 100), 0)
+            // Set the next word going if there is one!
+            if (_nextWord <= _containers.length - 1)
+                _containers[_nextWord++].body.setVelocity(Phaser.Math.Between(50, 100), 0)
         })
 
         // Give a Container velocity by setting it's physics 'body' property
-        self.physics.world.enable(container);
+        self.physics.world.enable(container)
         _containers.push(container)
     })
 
@@ -62,9 +68,9 @@ function setupAndStartLevel(self, levelNum) {
 }
 
 function preload() {
-    this.load.setBaseURL('/');
-    this.load.image('box', 'assets/img/box.png');
-    this.load.bitmapFont('arcade', 'assets/fonts/bitmap/arcade.png', 'assets/fonts/bitmap/arcade.xml');
+    this.load.setBaseURL('/')
+    this.load.image('box', 'assets/img/box.png')
+    this.load.bitmapFont('arcade', 'assets/fonts/bitmap/arcade.png', 'assets/fonts/bitmap/arcade.xml')
 }
 
 function create() {
@@ -124,7 +130,6 @@ function testAnswer(self, answer) {
         If no match, do nothing - perhaps make a sound, show an error image 
     */
     deleteWordFromScreen(self, answer.trim())
-    //resetCurrentWord()
 }
 
 function deleteWordFromScreen(self, w) {
@@ -133,7 +138,13 @@ function deleteWordFromScreen(self, w) {
         if (val.name.toUpperCase() === w.toUpperCase()) {
             val.destroy()
             resetCurrentWord()
-        }        
+
+            // Check for end of level
+            if (_nextWord === _containers.length) {
+                _endOfLevel = true
+                console.log("End of Level:", _level)
+            }
+        }
     })
 }
 
