@@ -107,7 +107,6 @@ function create() {
             _currentWordText.text = _currentWord
             // Always re-align word to be central
             _currentWordText.x = (WIDTH / 2) - (_currentWordText.width / 2)
-            console.dir(_currentWordText)
 
             /* TODO: Add an underline for style */
 
@@ -135,6 +134,7 @@ function testAnswer(self, answer) {
             deleteWordFromScreen(val)
 
             // Reset type area & check for end of level
+            updateScore(SCORE_WORD)
             resetCurrentWord()
             endOfLevel()
         }
@@ -156,4 +156,10 @@ function endOfLevel() {
 function resetCurrentWord() {
     _currentWordText.text = ""
     _currentWord = ""
+}
+
+function updateScore(amt) {
+    _score += amt
+    _scoreText.text = String(_score)
+    console.log(_score)
 }
