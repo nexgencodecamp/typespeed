@@ -22,20 +22,16 @@ let Scene_Intro = new Phaser.Class({
         let container = this.add.container(400, 350, [bg, text]);
 
         bg.on('pointerover', function () {
-
             this.setTint(0x44ff44);
-
         });
 
         bg.on('pointerout', function () {
-
             this.clearTint();
-
         });
 
         bg.on('pointerup', function () {
             console.log("Button pressed")
-             this.scene.start('scene_game');
+            this.scene.start('scene_game');
         }, this);
     }
 });

@@ -23,7 +23,6 @@ let Scene_Game = new Phaser.Class({
         // Receives every single key up event, regardless of origin or key
         this.input.keyboard.on('keyup', (event) => {
             let key = String.fromCharCode(event.keyCode)
-            console.log("KEY:", key)
 
             // If user presses ENTER, they submit an answer
             // TODO: Setup a regular expression to match only a-z and certain keys
@@ -62,6 +61,7 @@ let Scene_Game = new Phaser.Class({
         _containers.forEach((val, idx) => {
             if (val.active && val.x > WIDTH + val.first.width / 2) {
                 val.destroy()
+                this.updateScore(SCORE_PENALTY_OUT_OF_TIME_WORD)
             }
         })
     },
@@ -100,20 +100,23 @@ let Scene_Game = new Phaser.Class({
 
     testAnswer: function (self, answer) {
         /* 
-            Compare the answer with the current set of words/phrases
+            Compare the answer with the current WORD
             If it matches remove the word/phrase from the set, add to the score, remove word from typing area
             If no match, do nothing - perhaps make a sound, show an error image 
         */
-        _containers.forEach((val, idx) => {
-            if (val.name.toUpperCase() === answer.trim().toUpperCase()) {
-                this.deleteWordFromScreen(val)
+        let wordToTest = _containers[_nextWord - 1]
+        if (wordToTest.name.toUpperCase() === answer.trim().toUpperCase()) {
+            this.deleteWordFromScreen(wordToTest)
 
-                // Reset type area & check for end of level
-                this.updateScore(SCORE_WORD)
-                this.resetCurrentWord()
-                this.endOfLevel()
-            }
-        })
+            // Reset type area & check for end of level
+            this.updateScore(SCORE_WORD)
+            this.resetCurrentWord()
+            this.endOfLevelCheck()
+        }
+        else {
+            // Guess must be wrong! Award penalty points!
+            this.updateScore(SCORE_PENALTY_GUESS_INCORRECT)
+        }
     },
 
     deleteWordFromScreen: function (val) {
@@ -121,7 +124,7 @@ let Scene_Game = new Phaser.Class({
         val.destroy()
     },
 
-    endOfLevel: function () {
+    endOfLevelCheck: function () {
         if (_nextWord === _containers.length) {
             _endOfLevel = true
             console.log("End of Level:", _level)
