@@ -26,11 +26,7 @@ var config = {
 
         }
     },
-    scene: {
-        preload: preload,
-        create: create,
-        update: update
-    }
+    scene: [Scene_Intro]
 };
 
 var game = new Phaser.Game(config)
