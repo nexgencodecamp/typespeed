@@ -2,11 +2,9 @@ let Scene_Game = new Phaser.Class({
 
     Extends: Phaser.Scene,
 
-    initialize:
-
-        function SceneA() {
-            Phaser.Scene.call(this, { key: 'scene_game' });
-        },
+    initialize: function SceneA() {
+        Phaser.Scene.call(this, { key: 'scene_game' });
+    },
 
     preload: function () {
         this.load.setBaseURL('/')
@@ -19,6 +17,7 @@ let Scene_Game = new Phaser.Class({
 
         _currentWordText = this.add.bitmapText(400, 550, 'arcade', _currentWord, 12).setTint(0xff0000)
         _scoreText = this.add.bitmapText(750, 20, 'arcade', "0", 12).setTint(0xff0000)
+        _nextLevelText = this.add.bitmapText(400, 300, 'arcade', "", 12).setTint(0x00ff00)
 
         // Receives every single key up event, regardless of origin or key
         this.input.keyboard.on('keyup', (event) => {
@@ -37,12 +36,6 @@ let Scene_Game = new Phaser.Class({
                     _currentWord = _currentWordText.text
                 }
             }
-            else if (event.keyCode === KEYS.RIGHT) { // This will be our 'Game Start'            
-                // // Setup a few words loaded from a JSON source
-                // this.setupAndStartLevel(this, _level)
-                // Reset typing area
-                // _currentWordText.text = ""
-            }
             else {
                 // Print out letters
                 _currentWord = _currentWord.concat(key)
@@ -51,7 +44,6 @@ let Scene_Game = new Phaser.Class({
                 _currentWordText.x = (WIDTH / 2) - (_currentWordText.width / 2)
 
                 /* TODO: Add an underline for style */
-
             }
         });
 
@@ -89,8 +81,11 @@ let Scene_Game = new Phaser.Class({
 
             container.on('destroy', (obj) => {
                 // Set the next word going if there is one!
-                if (_nextWord <= _containers.length - 1)
-                    _containers[_nextWord++].body.setVelocity(Phaser.Math.Between(50, 100), 0)
+                ++_nextWord
+                console.log("_nextWord:", _nextWord)
+                if (_nextWord < _containers.length) {
+                    _containers[_nextWord].body.setVelocity(Phaser.Math.Between(50, 100), 0)
+                }
             })
 
             // Give a Container velocity by setting it's physics 'body' property
@@ -99,7 +94,7 @@ let Scene_Game = new Phaser.Class({
         })
 
         // Set first word going
-        _containers[_nextWord++].body.setVelocity(Phaser.Math.Between(50, 100), 0)
+        _containers[_nextWord].body.setVelocity(Phaser.Math.Between(50, 100), 0)
     },
 
     testAnswer: function (self, answer) {
@@ -108,7 +103,7 @@ let Scene_Game = new Phaser.Class({
             If it matches remove the word/phrase from the set, add to the score, remove word from typing area
             If no match, do nothing - perhaps make a sound, show an error image 
         */
-        let wordToTest = _containers[_nextWord - 1]
+        let wordToTest = _containers[_nextWord]
         if (wordToTest.name.toUpperCase() === answer.trim().toUpperCase()) {
             this.deleteWordFromScreen(wordToTest)
 
@@ -132,6 +127,8 @@ let Scene_Game = new Phaser.Class({
         if (_nextWord === _containers.length) {
             _endOfLevel = true
             console.log("End of Level:", _level)
+            this.setNextLevelText()
+            _level++
         }
     },
 
@@ -144,5 +141,13 @@ let Scene_Game = new Phaser.Class({
         _score += amt
         _scoreText.text = String(_score)
         console.log(_score)
+    },
+
+    setNextLevelText: function () {
+        _nextLevelText.text = `Level ${_level} complete. Get ready...`
+        _nextLevelText.x = (WIDTH / 2) - (_nextLevelText.width / 2)
+
+        // Start timer countdown for next level
+
     }
 });

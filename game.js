@@ -13,6 +13,7 @@ let _containers = []
 let _currentWord = ""   // This will be the player's answer
 let _currentWordText    // Screen representation of the current word
 let _level = 1
+let _nextLevelText      // Text to show when a level is complete
 let _nextWord = 0
 let _score = 0
 let _endOfLevel = false
