@@ -38,10 +38,10 @@ let Scene_Game = new Phaser.Class({
                 }
             }
             else if (event.keyCode === KEYS.RIGHT) { // This will be our 'Game Start'            
-                // Setup a few words loaded from a JSON source
-                this.setupAndStartLevel(this, _level)
+                // // Setup a few words loaded from a JSON source
+                // this.setupAndStartLevel(this, _level)
                 // Reset typing area
-                _currentWordText.text = ""
+                // _currentWordText.text = ""
             }
             else {
                 // Print out letters
@@ -54,6 +54,9 @@ let Scene_Game = new Phaser.Class({
 
             }
         });
+
+        // Setup a few words loaded from a JSON source
+        this.setupAndStartLevel(this, _level)
     },
 
     update: function () {
@@ -67,6 +70,7 @@ let Scene_Game = new Phaser.Class({
     },
 
     setupAndStartLevel: function (self, levelNum) {
+        _currentWordText.text = ""
         _onScreenPhrases = LEVEL_1.wordList
 
         // Create bitmaps & container objects
