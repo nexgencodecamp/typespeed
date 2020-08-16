@@ -2,11 +2,9 @@ let Scene_Intro = new Phaser.Class({
 
     Extends: Phaser.Scene,
 
-    initialize:
-
-        function SceneA() {
-            Phaser.Scene.call(this, { key: 'scene_intro' });
-        },
+    initialize: function SceneA() {
+        Phaser.Scene.call(this, { key: 'scene_intro' });
+    },
 
     preload: function () {
         this.load.image('intro', 'assets/img/intro.png');
@@ -15,7 +13,7 @@ let Scene_Intro = new Phaser.Class({
     },
 
     create: function () {
-        console.log('Scene Intro');
+        console.log('Scene Intro...');
 
         this.add.image(400, 300, 'intro')
 
@@ -37,7 +35,7 @@ let Scene_Intro = new Phaser.Class({
 
         bg.on('pointerup', function () {
             console.log("Button pressed")
+             this.scene.start('scene_game');
         }, this);
     }
-
 });
