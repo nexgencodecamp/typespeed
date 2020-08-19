@@ -9,6 +9,24 @@ Add multiple levels
 
 Add a timer and a time limit
 
+Add a timer bar
+
+Add a status bar with words/min, accuracy, misses
+
+Add a player rank
+
+Add badges
+
+Add warning and danger areas
+
+Change one word at a time to multiple or give the user an option
+
+Add settings screen
+
+Add login functionality
+
+Add a subscription & payment facility
+
 
 ## Features Completed
 Add scenes
