@@ -63,7 +63,9 @@ let Scene_Game = new Phaser.Class({
 
     setupAndStartLevel: function (self, levelNum) {
         _currentWordText.text = ""
-        _onScreenPhrases = LEVEL_1.wordList
+        _nextLevelText.text = ""
+        _onScreenPhrases = ALL_LEVELS[levelNum - 1].wordList
+        // _onScreenPhrases = LEVEL_1.wordList
 
         // Create bitmaps & container objects
         _onScreenPhrases.forEach((word, idx) => {
@@ -127,8 +129,8 @@ let Scene_Game = new Phaser.Class({
         if (_nextWord === _containers.length) {
             _endOfLevel = true
             console.log("End of Level:", _level)
-            this.setNextLevelText()
             _level++
+            this.setNextLevelText()
         }
     },
 
@@ -144,10 +146,20 @@ let Scene_Game = new Phaser.Class({
     },
 
     setNextLevelText: function () {
-        _nextLevelText.text = `Level ${_level} complete. Get ready...`
+        _nextLevelText.text = `Level ${_level - 1} complete. Get ready...`
         _nextLevelText.x = (WIDTH / 2) - (_nextLevelText.width / 2)
 
         // Start timer countdown for next level
+        this.startNextLevel()
+    },
 
+    startNextLevel: function () {
+        let timer = this.time.addEvent({
+            delay: 2000,                // ms
+            callback: this.setupAndStartLevel,
+            args: [this, _level],
+            callbackScope: this,
+            loop: false
+        });
     }
 });

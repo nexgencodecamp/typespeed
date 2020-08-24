@@ -8,3 +8,19 @@ const LEVEL_1 = {
         "hypertext"
     ]
 }
+
+const LEVEL_2 = {
+    "topic": "sharks",
+    "standard": 1,
+    "wordList": [
+        "bullshark",
+        "great white shark",
+        "mako",
+        "basking"
+    ]
+}
+
+const ALL_LEVELS = [
+    LEVEL_1,
+    LEVEL_2
+]
