@@ -32,7 +32,7 @@ let Scene_Game = new Phaser.Class({
                 // Make it look like we are backspacing the typed word
                 if (_currentWordText.text.length > 0) {
                     _currentWordText.text = _currentWordText.text.slice(0, -1)
-                    _currentWordText.x = (WIDTH / 2) - (_currentWordText.width / 2)
+                    _currentWordText.x = centerText(_currentWordText)
                     _currentWord = _currentWordText.text
                 }
             }
@@ -41,7 +41,7 @@ let Scene_Game = new Phaser.Class({
                 _currentWord = _currentWord.concat(key)
                 _currentWordText.text = _currentWord
                 // Always re-align word to be central
-                _currentWordText.x = (WIDTH / 2) - (_currentWordText.width / 2)
+                _currentWordText.x = centerText(_currentWordText)
 
                 /* TODO: Add an underline for style */
             }
@@ -147,7 +147,7 @@ let Scene_Game = new Phaser.Class({
 
     setNextLevelText: function () {
         _nextLevelText.text = `Level ${_level - 1} complete. Get ready...`
-        _nextLevelText.x = (WIDTH / 2) - (_nextLevelText.width / 2)
+        _nextLevelText.x = centerText(_nextLevelText)
 
         // Start timer countdown for next level
         this.startNextLevel()
@@ -163,3 +163,7 @@ let Scene_Game = new Phaser.Class({
         });
     }
 });
+
+function centerText(wd) {
+    return (WIDTH / 2) - (wd.width / 2);
+}
