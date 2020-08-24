@@ -99,7 +99,8 @@ let Scene_Game = new Phaser.Class({
 
         // Set first word going
         _containers[_nextWord].body.setVelocity(Phaser.Math.Between(50, 100), 0)
-        music.play();
+        if (_level === 1)
+            music.play();
     },
 
     testAnswer: function (self, answer) {

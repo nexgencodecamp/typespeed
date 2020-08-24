@@ -3,10 +3,6 @@ Typespeed is a game in which you pit your wits against the rest of the World to 
 
 ## Features to Implement
 
-Add sound capability   
-    
-Add multiple levels
-
 Add a timer and a time limit
 
 Add a timer bar
@@ -27,6 +23,12 @@ Add login functionality
 
 Add a subscription & payment facility
 
+Add a you lose feature
+
+Add modes
+
+High scores
+
 
 ## Features Completed
 Add scenes
@@ -38,3 +40,7 @@ Scoring
     - Plus points for each word
     - Minus points for each word that 'escapes'
     - Minus points for each guess the player gets wrong
+
+Add sound capability 
+
+Add multiple levels

@@ -6,6 +6,14 @@ const SCORE_WORD = 100
 const SCORE_PENALTY_GUESS_INCORRECT = -10
 const SCORE_PENALTY_OUT_OF_TIME_WORD = -50
 const SCORE_BONUS_LEVEL_1 = 1000
+const MODES = {
+    TRAINING: "TRAINING",
+    WORDS_PER_MIN: "WORDS_PER_MIN",
+    EASY: "EASY",
+    MEDIUM: "MEDIUM",
+    HARD: "HARD",
+    BATTLE: "BATTLE"
+}
 
 // Game variables
 let _onScreenPhrases    // In-game phrases currently on-screen
@@ -17,8 +25,9 @@ let _nextLevelText      // Text to show when a level is complete
 let _nextWord = 0
 let _score = 0
 let _endOfLevel = false
+let _mode = MODES.TRAINING
 
-var config = {
+let config = {
     type: Phaser.AUTO,
     width: WIDTH,
     height: HEIGHT,

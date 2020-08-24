@@ -9,7 +9,6 @@ function typeWriteText(self, textObj, text, delay, cb) {
         callback: () => {
             textObj.text += text[i]
             ++i
-            console.log("textObj length:", textObj.text.length, "text length:", text.length)
             if (textObj.text.length === text.length) {
                 cb();
             }
