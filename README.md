@@ -14,24 +14,19 @@ Add settings screen
 Add login functionality
 Add a subscription & payment facility
 Add a you lose feature
-Add modes
 High scores
-Add a pause function
-Add a flashing cursor
+Add a pause function in training mode
 Add speech bubbles to training mode
-
 
 ## Features Completed
 Add scenes
-
 Add a start scene
     - Add a start button
-
 Scoring
     - Plus points for each word
     - Minus points for each word that 'escapes'
     - Minus points for each guess the player gets wrong
-
 Add sound capability 
-
 Add multiple levels
+Add a flashing cursor
+Add modes
