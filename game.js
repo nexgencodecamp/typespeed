@@ -3,7 +3,6 @@ const WIDTH = 800
 const HEIGHT = 600
 const KEYS = Phaser.Input.Keyboard.KeyCodes
 const SCORE_WORD = 100
-const SCORE_PENALTY_GUESS_INCORRECT = -10
 const SCORE_PENALTY_OUT_OF_TIME_WORD = -50
 const SCORE_BONUS_LEVEL_1 = 1000
 const MODES = {

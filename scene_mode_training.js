@@ -31,15 +31,10 @@ let Scene_Game = new Phaser.Class({
         // boom.anims.play('blink');
 
         // Receives every single key up event, regardless of origin or key
-        this.input.keyboard.on('keyup', (event) => {
+        this.input.keyboard.on('keydown', (event) => {
             let key = String.fromCharCode(event.keyCode)
 
-            // If user presses ENTER, they submit an answer
-            // TODO: Setup a regular expression to match only a-z and certain keys
-            if (event.keyCode === KEYS.ENTER) {
-                this.testAnswer(this, _currentWord)
-            }
-            else if (event.keyCode === KEYS.BACKSPACE) {
+            if (event.keyCode === KEYS.BACKSPACE) {
                 // Make it look like we are backspacing the typed word
                 if (_currentWordText.text.length > 0) {
                     _currentWord = _currentWord.slice(0, -1)
@@ -50,8 +45,12 @@ let Scene_Game = new Phaser.Class({
                 // Print out letters
                 _currentWord = _currentWord.concat(key)
                 _currentWordText.x = CURRENT_WORD_X
-
-                /* TODO: Add an underline for style */
+                // Test the current word
+                this.time.addEvent({
+                    delay: 250,
+                    callback: this.testAnswer,
+                    args: [this, _currentWord],
+                });
             }
         });
 
@@ -120,17 +119,14 @@ let Scene_Game = new Phaser.Class({
             If no match, do nothing - perhaps make a sound, show an error image 
         */
         let wordToTest = _containers[_nextWord]
+        console.log("wordToTest:", wordToTest.name.toUpperCase(), "answer:", answer.trim().toUpperCase())
         if (wordToTest.name.toUpperCase() === answer.trim().toUpperCase()) {
-            this.deleteWordFromScreen(wordToTest)
+            self.deleteWordFromScreen(wordToTest)
 
             // Reset type area & check for end of level
-            this.updateScore(SCORE_WORD)
-            this.resetCurrentWord()
-            this.endOfLevelCheck()
-        }
-        else {
-            // Guess must be wrong! Award penalty points!
-            this.updateScore(SCORE_PENALTY_GUESS_INCORRECT)
+            self.updateScore(SCORE_WORD)
+            self.resetCurrentWord()
+            self.endOfLevelCheck()
         }
     },
 

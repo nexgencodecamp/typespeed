@@ -33,6 +33,7 @@ let Scene_Intro = new Phaser.Class({
         let container = this.add.container(400, 300, [bg, text]);
         container.visible = false
 
+        // TODO: Refactor this to a button create method
         // Modes
         let btnModeTraining = this.add.image(400, 260, 'buttonModeTraining')
         btnModeTraining.setInteractive();
