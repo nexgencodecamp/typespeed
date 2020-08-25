@@ -11,11 +11,13 @@ let Scene_Game = new Phaser.Class({
         this.load.image('box', 'assets/img/box.png')
         this.load.spritesheet('cursor', 'assets/sprite/cursor_spritesheet.png', { frameWidth: 16, frameHeight: 4 });
         this.load.bitmapFont('arcade', 'assets/fonts/bitmap/arcade.png', 'assets/fonts/bitmap/arcade.xml')
+        this.load.bitmapFont('azo-fire', 'assets/fonts/bitmap/azo-fire.png', 'assets/fonts/bitmap/azo-fire.xml')
         this.load.audio('typespeed_theme', ['assets/audio/typespeed.mp3']);
     },
 
     create: function () {
         console.log('Scene Game...');
+        createStatusBar(this);
 
         _currentWordText = this.add.bitmapText(20, 570, 'arcade', _currentWord, 12).setTint(0xff0000)
         _scoreText = this.add.bitmapText(750, 20, 'arcade', "0", 12).setTint(0xff0000)
@@ -183,3 +185,4 @@ let Scene_Game = new Phaser.Class({
         });
     }
 });
+

@@ -1,3 +1,17 @@
+function createStatusBar(self) {
+    var graphics = self.add.graphics();
+    var line = new Phaser.Geom.Line(0, 560, 800, 560);
+    graphics.lineStyle(1, 0x888000);
+    graphics.strokeLineShape(line);
+
+    _statusBar.wordsPerMin = 0
+    _statusBar.wordsPerMinText = self.add.bitmapText(365, 570, 'azo-fire', "W/MIN:" + _statusBar.wordsPerMin, 20).setTint(0xFFFEEE)
+    _statusBar.accuracy = 0
+    _statusBar.accuracy = self.add.bitmapText(510, 570, 'azo-fire', "ACC:" + _statusBar.accuracy + "%", 20).setTint(0xFFFEEE)
+    _statusBar.numHits = 0
+    _statusBar.numHits = self.add.bitmapText(630, 570, 'azo-fire', "NUM HITS:" + _statusBar.numHits, 20).setTint(0xFFFEEE)
+}
+
 function centerText(totalWidth, wd) {
     return (totalWidth / 2) - (wd.width / 2);
 }
@@ -18,6 +32,17 @@ function typeWriteText(self, textObj, text, delay, cb) {
     })
 }
 
+/**
+   this.createSpeechBubble(20, 20, 320, 160, '“Twin ceramic rotor drives on each wheel! And these look like!”');
+   this.createSpeechBubble(370, 120, 400, 180, '“You always show up and start bossing me around, and don\'t you deny it!”');
+   this.createSpeechBubble(70, 400, 250, 100, '“And now you\'re a boss, too... of this pile of rubble.”');
+
+ * @param {*} x 
+ * @param {*} y 
+ * @param {*} width 
+ * @param {*} height 
+ * @param {*} quote 
+ */
 function createSpeechBubble(x, y, width, height, quote) {
     var bubbleWidth = width;
     var bubbleHeight = height;

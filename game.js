@@ -28,6 +28,7 @@ let _score = 0
 let _endOfLevel = false
 let _mode = MODES.TRAINING
 let _blinkCursor
+let _statusBar = {} 
 
 let config = {
     type: Phaser.AUTO,
