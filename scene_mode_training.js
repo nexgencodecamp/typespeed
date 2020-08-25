@@ -27,8 +27,8 @@ let Scene_Game = new Phaser.Class({
             repeat: -1
         };
         this.anims.create(config);
-        // var boom = this.add.sprite(392, 580, 'cursor');
-        // boom.anims.play('blink');
+        _blinkCursor = this.add.sprite(BLINKCURSOR_OFFSET_X, 587, 'cursor');
+        _blinkCursor.anims.play('blink');
 
         // Receives every single key up event, regardless of origin or key
         this.input.keyboard.on('keydown', (event) => {
@@ -38,13 +38,15 @@ let Scene_Game = new Phaser.Class({
                 // Make it look like we are backspacing the typed word
                 if (_currentWordText.text.length > 0) {
                     _currentWord = _currentWord.slice(0, -1)
-                    _currentWordText.x = CURRENT_WORD_X //centerText(WIDTH, _currentWordText)
+                    _currentWordText.x = CURRENT_WORD_X
+                    this.updateCursorPos(-12)
                 }
             }
             else {
                 // Print out letters
                 _currentWord = _currentWord.concat(key)
-                _currentWordText.x = CURRENT_WORD_X
+                // Move cursor
+                this.updateCursorPos(12)
                 // Test the current word
                 this.time.addEvent({
                     delay: 250,
@@ -64,6 +66,7 @@ let Scene_Game = new Phaser.Class({
             if (val.active && val.x > WIDTH + val.first.width / 2) {
                 val.destroy()
                 this.updateScore(SCORE_PENALTY_OUT_OF_TIME_WORD)
+                this.resetCursor()
                 _currentWord = ""
             }
         })
@@ -108,8 +111,8 @@ let Scene_Game = new Phaser.Class({
 
         // Set first word going
         _containers[_nextWord].body.setVelocity(Phaser.Math.Between(50, 100), 0)
-        if (_level === 1)
-            music.play();
+        //if (_level === 1)
+        //music.play();
     },
 
     testAnswer: function (self, answer) {
@@ -122,7 +125,7 @@ let Scene_Game = new Phaser.Class({
         console.log("wordToTest:", wordToTest.name.toUpperCase(), "answer:", answer.trim().toUpperCase())
         if (wordToTest.name.toUpperCase() === answer.trim().toUpperCase()) {
             self.deleteWordFromScreen(wordToTest)
-
+            self.resetCursor();
             // Reset type area & check for end of level
             self.updateScore(SCORE_WORD)
             self.resetCurrentWord()
@@ -133,6 +136,14 @@ let Scene_Game = new Phaser.Class({
     deleteWordFromScreen: function (val) {
         // We have to delete the container to remove it from screen    
         val.destroy()
+    },
+
+    resetCursor: function () {
+        _blinkCursor.x = BLINKCURSOR_OFFSET_X;
+    },
+
+    updateCursorPos: function (amt) {
+        _blinkCursor.x += amt
     },
 
     endOfLevelCheck: function () {

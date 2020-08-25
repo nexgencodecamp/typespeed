@@ -14,6 +14,7 @@ const MODES = {
     BATTLE: "BATTLE"
 }
 const CURRENT_WORD_X = 20
+const BLINKCURSOR_OFFSET_X = 26
 
 // Game variables
 let _onScreenPhrases    // In-game phrases currently on-screen
@@ -26,6 +27,7 @@ let _nextWord = 0
 let _score = 0
 let _endOfLevel = false
 let _mode = MODES.TRAINING
+let _blinkCursor
 
 let config = {
     type: Phaser.AUTO,
