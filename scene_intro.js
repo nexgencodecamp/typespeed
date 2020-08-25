@@ -40,6 +40,11 @@ let Scene_Intro = new Phaser.Class({
         btnModeTraining.setTint(0xff00ff);
         btnTrainingText = this.add.bitmapText(353, 252, 'arcade', "Training", 12).setTint(0xff0000)
 
+        btnModeTraining.on('pointerup', function () {
+            this.scene.start('scene_mode_training');
+            _mode = MODES.TRAINING
+        }, this);
+
         let btnModeWordsPerMin = this.add.image(400, 320, 'buttonModeWordsPerMin')
         btnModeWordsPerMin.setInteractive();
         btnModeWordsPerMin.scale = 0.5

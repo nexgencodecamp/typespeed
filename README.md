@@ -4,30 +4,21 @@ Typespeed is a game in which you pit your wits against the rest of the World to 
 ## Features to Implement
 
 Add a timer and a time limit
-
 Add a timer bar
-
 Add a status bar with words/min, accuracy, misses
-
 Add a player rank
-
 Add badges
-
 Add warning and danger areas
-
 Change one word at a time to multiple or give the user an option
-
 Add settings screen
-
 Add login functionality
-
 Add a subscription & payment facility
-
 Add a you lose feature
-
 Add modes
-
 High scores
+Add a pause function
+Add a flashing cursor
+Add speech bubbles to training mode
 
 
 ## Features Completed
