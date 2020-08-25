@@ -17,7 +17,7 @@ let Scene_Game = new Phaser.Class({
     create: function () {
         console.log('Scene Game...');
 
-        _currentWordText = this.add.bitmapText(400, 550, 'arcade', _currentWord, 12).setTint(0xff0000)
+        _currentWordText = this.add.bitmapText(20, 570, 'arcade', _currentWord, 12).setTint(0xff0000)
         _scoreText = this.add.bitmapText(750, 20, 'arcade', "0", 12).setTint(0xff0000)
         _nextLevelText = this.add.bitmapText(400, 300, 'arcade', "", 12).setTint(0x00ff00)
         var config = {
@@ -27,8 +27,8 @@ let Scene_Game = new Phaser.Class({
             repeat: -1
         };
         this.anims.create(config);
-        var boom = this.add.sprite(392, 580, 'cursor');
-        boom.anims.play('blink');
+        // var boom = this.add.sprite(392, 580, 'cursor');
+        // boom.anims.play('blink');
 
         // Receives every single key up event, regardless of origin or key
         this.input.keyboard.on('keyup', (event) => {
@@ -42,17 +42,14 @@ let Scene_Game = new Phaser.Class({
             else if (event.keyCode === KEYS.BACKSPACE) {
                 // Make it look like we are backspacing the typed word
                 if (_currentWordText.text.length > 0) {
-                    _currentWordText.text = _currentWordText.text.slice(0, -1)
-                    _currentWordText.x = centerText(WIDTH, _currentWordText)
-                    _currentWord = _currentWordText.text
+                    _currentWord = _currentWord.slice(0, -1)
+                    _currentWordText.x = CURRENT_WORD_X //centerText(WIDTH, _currentWordText)
                 }
             }
             else {
                 // Print out letters
                 _currentWord = _currentWord.concat(key)
-                _currentWordText.text = _currentWord
-                // Always re-align word to be central
-                _currentWordText.x = centerText(WIDTH, _currentWordText)
+                _currentWordText.x = CURRENT_WORD_X
 
                 /* TODO: Add an underline for style */
             }
@@ -63,21 +60,24 @@ let Scene_Game = new Phaser.Class({
     },
 
     update: function () {
-        // Destroy offscreen game objects
+        // Destroy offscreen game objects & reset text
         _containers.forEach((val, idx) => {
             if (val.active && val.x > WIDTH + val.first.width / 2) {
                 val.destroy()
                 this.updateScore(SCORE_PENALTY_OUT_OF_TIME_WORD)
+                _currentWord = ""
             }
         })
+
+        // Update screen text
+        _currentWordText.text = _currentWord
     },
 
     setupAndStartLevel: function (self, levelNum) {
-        _currentWordText.text = ""
+        _currentWord = ""
         _nextLevelText.text = ""
         _onScreenPhrases = ALL_LEVELS.MODES_TRAINING.levels[levelNum - 1].wordList
         let music = self.sound.add('typespeed_theme');
-        // _onScreenPhrases = LEVEL_1.wordList
 
         // Create bitmaps & container objects
         _onScreenPhrases.forEach((word, idx) => {
@@ -149,7 +149,6 @@ let Scene_Game = new Phaser.Class({
     },
 
     resetCurrentWord: function () {
-        _currentWordText.text = ""
         _currentWord = ""
     },
 

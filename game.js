@@ -14,6 +14,7 @@ const MODES = {
     HARD: "HARD",
     BATTLE: "BATTLE"
 }
+const CURRENT_WORD_X = 20
 
 // Game variables
 let _onScreenPhrases    // In-game phrases currently on-screen
