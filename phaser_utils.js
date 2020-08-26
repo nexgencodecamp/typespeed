@@ -7,9 +7,9 @@ function createStatusBar(self) {
     _statusBar.wordsPerMin = 0
     _statusBar.wordsPerMinText = self.add.bitmapText(365, 570, 'azo-fire', "W/MIN:" + _statusBar.wordsPerMin, 20).setTint(0xFFFEEE)
     _statusBar.accuracy = 0
-    _statusBar.accuracy = self.add.bitmapText(510, 570, 'azo-fire', "ACC:" + _statusBar.accuracy + "%", 20).setTint(0xFFFEEE)
+    _statusBar.accuracyText = self.add.bitmapText(510, 570, 'azo-fire', "ACC:" + _statusBar.accuracy + "%", 20).setTint(0xFFFEEE)
     _statusBar.numHits = 0
-    _statusBar.numHits = self.add.bitmapText(630, 570, 'azo-fire', "NUM HITS:" + _statusBar.numHits, 20).setTint(0xFFFEEE)
+    _statusBar.numHitsText = self.add.bitmapText(630, 570, 'azo-fire', "NUM HITS:" + _statusBar.numHits, 20).setTint(0xFFFEEE)
 }
 
 function centerText(totalWidth, wd) {

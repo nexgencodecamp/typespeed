@@ -1,3 +1,5 @@
+_levelTimer = 0
+
 let Scene_Game = new Phaser.Class({
 
     Extends: Phaser.Scene,
@@ -75,6 +77,10 @@ let Scene_Game = new Phaser.Class({
 
         // Update screen text
         _currentWordText.text = _currentWord
+
+        // Update status bar
+        _statusBar.numHitsText.text = "NUM HITS:" + _statusBar.numHits
+
     },
 
     setupAndStartLevel: function (self, levelNum) {
@@ -113,8 +119,20 @@ let Scene_Game = new Phaser.Class({
 
         // Set first word going
         _containers[_nextWord].body.setVelocity(Phaser.Math.Between(50, 100), 0)
+        // Start timer
+        _levelTimer = this.time.addEvent({
+            delay: 500,                // ms
+            callback: this.checkLevelTimer,
+            //args: [],
+            //callbackScope: thisArg,
+            loop: true
+        });
         //if (_level === 1)
         //music.play();
+    },
+
+    checkLevelTimer: function () {
+        console.log("Level Timer:", _levelTimer.getElapsed())
     },
 
     testAnswer: function (self, answer) {
@@ -124,12 +142,14 @@ let Scene_Game = new Phaser.Class({
             If no match, do nothing - perhaps make a sound, show an error image 
         */
         let wordToTest = _containers[_nextWord]
-        console.log("wordToTest:", wordToTest.name.toUpperCase(), "answer:", answer.trim().toUpperCase())
+        //console.log("wordToTest:", wordToTest.name.toUpperCase(), "answer:", answer.trim().toUpperCase())
+        // OK - THIS IS A HIT !!!
         if (wordToTest.name.toUpperCase() === answer.trim().toUpperCase()) {
             self.deleteWordFromScreen(wordToTest)
             self.resetCursor();
             // Reset type area & check for end of level
             self.updateScore(SCORE_WORD)
+            self.updateStatusBar()
             self.resetCurrentWord()
             self.endOfLevelCheck()
         }
@@ -165,6 +185,10 @@ let Scene_Game = new Phaser.Class({
         _score += amt
         _scoreText.text = String(_score)
         console.log(_score)
+    },
+
+    updateStatusBar: function () {
+        _statusBar.numHits++
     },
 
     setNextLevelText: function () {
