@@ -1,5 +1,6 @@
 _levelTimer = 0
 _timeOnLevel = 0
+_pausedTempObj = {}
 
 let Scene_Game = new Phaser.Class({
 
@@ -25,6 +26,7 @@ let Scene_Game = new Phaser.Class({
         _currentWordText = this.add.bitmapText(20, 570, 'arcade', _currentWord, 12).setTint(0xff0000)
         _scoreText = this.add.bitmapText(750, 20, 'arcade', "0", 12).setTint(0xff0000)
         _nextLevelText = this.add.bitmapText(400, 300, 'arcade', "", 12).setTint(0x00ff00)
+        _pausedText = this.add.bitmapText(400, 280, 'arcade', "", 12).setTint(0x00ff00)
         var config = {
             key: 'blink',
             frames: this.anims.generateFrameNames('cursor', { start: 0, end: 5 }),
@@ -39,7 +41,7 @@ let Scene_Game = new Phaser.Class({
         this.input.keyboard.on('keyup', (event) => {
             let key = String.fromCharCode(event.keyCode)
 
-            if (event.keyCode === KEYS.BACKSPACE) {
+            if (event.keyCode === KEYS.BACKSPACE && !_paused) {
                 // Make it look like we are backspacing the typed word
                 if (_currentWordText.text.length > 0) {
                     _currentWord = _currentWord.slice(0, -1)
@@ -47,19 +49,36 @@ let Scene_Game = new Phaser.Class({
                     this.updateCursorPos(-12)
                 }
             }
+            else if (event.keyCode === KEYS.SPACE) {
+                // Un/Pause the game
+                _paused = !_paused
+                if (_paused) {
+                    // Prevent input
+                    // Stop timers
+                    // Halt objects
+                    _pausedTempObj.wordVelocityX = _containers[_nextWord].body.velocity.x
+                    _containers[_nextWord].body.setVelocity(0, 0)
+                }
+                else {
+                    _containers[_nextWord].body.setVelocity(_pausedTempObj.wordVelocityX, 0)
+                    _pausedTempObj = {}
+                }
+            }
             else {
-                // Update for stats
-                _statusBar.numKeystrokes++
-                // Print out letters
-                _currentWord = _currentWord.concat(key)
-                // Move cursor
-                this.updateCursorPos(12)
-                // Test the current word
-                this.time.addEvent({
-                    delay: 250,
-                    callback: this.testAnswer,
-                    args: [this, _currentWord],
-                });
+                if (!_paused) {
+                    // Update for stats
+                    _statusBar.numKeystrokes++
+                    // Print out letters
+                    _currentWord = _currentWord.concat(key)
+                    // Move cursor
+                    this.updateCursorPos(12)
+                    // Test the current word
+                    this.time.addEvent({
+                        delay: 250,
+                        callback: this.testAnswer,
+                        args: [this, _currentWord],
+                    });
+                }
             }
         });
 
@@ -86,6 +105,9 @@ let Scene_Game = new Phaser.Class({
         _statusBar.accuracyText.text = "ACC:" + _statusBar.accuracy
         _statusBar.wordsPerMinText.text = "W/MIN:" + _statusBar.wordsPerMin
 
+        // Pause
+        _pausedText.text = _paused === true ? "PAUSED" : ""
+        _pausedText.x = centerText(WIDTH, _pausedText)
     },
 
     setupAndStartLevel: function (self, levelNum) {
@@ -111,7 +133,6 @@ let Scene_Game = new Phaser.Class({
             container.on('destroy', (obj) => {
                 // Set the next word going if there is one!
                 ++_nextWord
-                console.log("_nextWord:", _nextWord)
                 if (_nextWord < _containers.length) {
                     _containers[_nextWord].body.setVelocity(Phaser.Math.Between(50, 100), 0)
                 }
