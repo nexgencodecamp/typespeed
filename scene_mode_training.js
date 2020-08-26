@@ -1,4 +1,5 @@
 _levelTimer = 0
+_timeOnLevel = 0
 
 let Scene_Game = new Phaser.Class({
 
@@ -35,7 +36,7 @@ let Scene_Game = new Phaser.Class({
         _blinkCursor.anims.play('blink');
 
         // Receives every single key up event, regardless of origin or key
-        this.input.keyboard.on('keydown', (event) => {
+        this.input.keyboard.on('keyup', (event) => {
             let key = String.fromCharCode(event.keyCode)
 
             if (event.keyCode === KEYS.BACKSPACE) {
@@ -47,6 +48,8 @@ let Scene_Game = new Phaser.Class({
                 }
             }
             else {
+                // Update for stats
+                _statusBar.numKeystrokes++
                 // Print out letters
                 _currentWord = _currentWord.concat(key)
                 // Move cursor
@@ -80,6 +83,8 @@ let Scene_Game = new Phaser.Class({
 
         // Update status bar
         _statusBar.numHitsText.text = "NUM HITS:" + _statusBar.numHits
+        _statusBar.accuracyText.text = "ACC:" + _statusBar.accuracy
+        _statusBar.wordsPerMinText.text = "W/MIN:" + _statusBar.wordsPerMin
 
     },
 
@@ -132,7 +137,7 @@ let Scene_Game = new Phaser.Class({
     },
 
     checkLevelTimer: function () {
-        console.log("Level Timer:", _levelTimer.getElapsed())
+        _timeOnLevel += 500
     },
 
     testAnswer: function (self, answer) {
@@ -142,14 +147,20 @@ let Scene_Game = new Phaser.Class({
             If no match, do nothing - perhaps make a sound, show an error image 
         */
         let wordToTest = _containers[_nextWord]
-        //console.log("wordToTest:", wordToTest.name.toUpperCase(), "answer:", answer.trim().toUpperCase())
+
+        // Test for accuracy
+        if (answer.trim().toUpperCase() === wordToTest.name.toUpperCase().slice(0, answer.trim().length)) {
+            _statusBar.numCorrectKeystrokes++
+        }
+        self.updateStatusBar(false, true, false)
+
         // OK - THIS IS A HIT !!!
         if (wordToTest.name.toUpperCase() === answer.trim().toUpperCase()) {
             self.deleteWordFromScreen(wordToTest)
             self.resetCursor();
             // Reset type area & check for end of level
             self.updateScore(SCORE_WORD)
-            self.updateStatusBar()
+            self.updateStatusBar(true, false, true)
             self.resetCurrentWord()
             self.endOfLevelCheck()
         }
@@ -173,6 +184,7 @@ let Scene_Game = new Phaser.Class({
             _endOfLevel = true
             console.log("End of Level:", _level)
             _level++
+            resetStatusBar()
             this.setNextLevelText()
         }
     },
@@ -187,8 +199,11 @@ let Scene_Game = new Phaser.Class({
         console.log(_score)
     },
 
-    updateStatusBar: function () {
-        _statusBar.numHits++
+    updateStatusBar: function (bNumHits = false, bAccuracy = false, bWordsPerMin = false) {
+        if (bNumHits) _statusBar.numHits++
+        if (bAccuracy) _statusBar.accuracy = Math.round((_statusBar.numCorrectKeystrokes / _statusBar.numKeystrokes) * 100)
+        if (bWordsPerMin) _statusBar.wordsPerMin = Math.round(++_statusBar.numWords * (60 / (_timeOnLevel / 1000)))
+        //console.log("numWords:", _statusBar.numWords, "wordsPerMin", _statusBar.wordsPerMin, "elapsed time:", _timeOnLevel)
     },
 
     setNextLevelText: function () {

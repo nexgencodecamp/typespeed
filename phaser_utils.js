@@ -4,12 +4,24 @@ function createStatusBar(self) {
     graphics.lineStyle(1, 0x888000);
     graphics.strokeLineShape(line);
 
+    _statusBar.numKeystrokes = 0
+    _statusBar.numWords = 0
+    _statusBar.numCorrectKeystrokes = 0
     _statusBar.wordsPerMin = 0
     _statusBar.wordsPerMinText = self.add.bitmapText(365, 570, 'azo-fire', "W/MIN:" + _statusBar.wordsPerMin, 20).setTint(0xFFFEEE)
     _statusBar.accuracy = 0
     _statusBar.accuracyText = self.add.bitmapText(510, 570, 'azo-fire', "ACC:" + _statusBar.accuracy + "%", 20).setTint(0xFFFEEE)
     _statusBar.numHits = 0
     _statusBar.numHitsText = self.add.bitmapText(630, 570, 'azo-fire', "NUM HITS:" + _statusBar.numHits, 20).setTint(0xFFFEEE)
+}
+
+function resetStatusBar() {
+    _statusBar.numKeystrokes = 0
+    _statusBar.numWords = 0
+    _statusBar.numCorrectKeystrokes = 0
+    _statusBar.wordsPerMin = 0
+    _statusBar.accuracy = 0
+    _statusBar.numHits = 0
 }
 
 function centerText(totalWidth, wd) {
